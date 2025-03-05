@@ -11,17 +11,34 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controlador para manejar las solicitudes de inicio de sesión.
+ */
 @Controller
 @RequestMapping("/web/login")
 public class LoginController {
     @Autowired
     SecurityService securityService;
 
+    /**
+     * Muestra la página de inicio de sesión.
+     *
+     * @param model el modelo de la vista
+     * @return la vista de inicio de sesión
+     */
     @GetMapping
     public String login(Model model) {
         return "web/login";
     }
 
+    /**
+     * Procesa el formulario de inicio de sesión.
+     *
+     * @param session la sesión HTTP
+     * @param model el modelo de la vista
+     * @param login el objeto Usuario con los datos de inicio de sesión
+     * @return redirección a la página correspondiente según el resultado del inicio de sesión
+     */
     @PostMapping
     public String processLogin(HttpSession session, Model model, @ModelAttribute Usuario login) {
         var result = securityService.login(login.getNombre(), login.getEmail());
@@ -39,10 +56,15 @@ public class LoginController {
         }
     }
 
+    /**
+     * Maneja la solicitud de cierre de sesión.
+     *
+     * @param session la sesión HTTP
+     * @return redirección a la página de inicio de sesión
+     */
     @GetMapping("/exit")
     public String exit(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:/web/login";
     }
-
 }

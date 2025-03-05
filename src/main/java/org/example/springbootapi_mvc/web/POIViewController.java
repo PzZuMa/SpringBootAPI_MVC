@@ -8,13 +8,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * Controlador para gestionar las vistas relacionadas con los puntos de interés (POI).
+ */
 @Controller
 @RequestMapping("/web/poi")
 public class POIViewController {
     @Autowired
     private POIRepository poiRepository;
 
+    /**
+     * Muestra la lista de puntos de interés.
+     *
+     * @param session la sesión HTTP actual
+     * @param model el modelo para la vista
+     * @return la vista de la lista de puntos de interés
+     */
     @GetMapping("/lista")
     public String listarPOIs(HttpSession session, Model model) {
         if (session.getAttribute("user") == null) {
@@ -26,6 +35,14 @@ public class POIViewController {
         return "poi/lista";
     }
 
+    /**
+     * Muestra los detalles de un punto de interés específico.
+     *
+     * @param session la sesión HTTP actual
+     * @param id el ID del punto de interés
+     * @param model el modelo para la vista
+     * @return la vista de los detalles del punto de interés
+     */
     @GetMapping("/{id}")
     public String detallePOI(HttpSession session, @PathVariable String id, Model model) {
         if (session.getAttribute("user") == null) {
@@ -38,6 +55,14 @@ public class POIViewController {
         return "poi/detalle";
     }
 
+    /**
+     * Muestra el formulario para editar un punto de interés específico.
+     *
+     * @param session la sesión HTTP actual
+     * @param id el ID del punto de interés
+     * @param model el modelo para la vista
+     * @return la vista del formulario de edición del punto de interés
+     */
     @GetMapping("/{id}/editar")
     public String editarPOI(HttpSession session, @PathVariable String id, Model model) {
         if (session.getAttribute("user") == null) {
@@ -50,6 +75,14 @@ public class POIViewController {
         return "poi/editar";
     }
 
+    /**
+     * Guarda los cambios realizados a un punto de interés específico.
+     *
+     * @param session la sesión HTTP actual
+     * @param id el ID del punto de interés
+     * @param poi el punto de interés con los cambios realizados
+     * @return redirige a la vista de detalles del punto de interés
+     */
     @PostMapping("/{id}/editar")
     public String guardarPOI(HttpSession session, @PathVariable String id, @ModelAttribute POI poi) {
         if (session.getAttribute("user") == null) {
@@ -68,6 +101,13 @@ public class POIViewController {
         return "redirect:/web/poi/" + id;
     }
 
+    /**
+     * Elimina un punto de interés específico.
+     *
+     * @param session la sesión HTTP actual
+     * @param id el ID del punto de interés
+     * @return redirige a la vista de la lista de puntos de interés
+     */
     @PostMapping("/{id}/eliminar")
     public String eliminarPOI(HttpSession session, @PathVariable String id) {
         if (session.getAttribute("user") == null) {
@@ -83,6 +123,13 @@ public class POIViewController {
         return "redirect:/web/poi/lista";
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo punto de interés.
+     *
+     * @param session la sesión HTTP actual
+     * @param model el modelo para la vista
+     * @return la vista del formulario de creación de un nuevo punto de interés
+     */
     @GetMapping("/nuevo")
     public String nuevoPOI(HttpSession session, Model model) {
         if (session.getAttribute("user") == null) {
@@ -95,6 +142,13 @@ public class POIViewController {
         return "poi/nuevo";
     }
 
+    /**
+     * Guarda un nuevo punto de interés.
+     *
+     * @param session la sesión HTTP actual
+     * @param poi el nuevo punto de interés a guardar
+     * @return redirige a la vista de la lista de puntos de interés
+     */
     @PostMapping("/nuevo")
     public String guardarNuevoPOI(HttpSession session, @ModelAttribute POI poi) {
         poiRepository.save(poi);
